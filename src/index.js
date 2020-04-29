@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import testData from "./testData";
+import Scramble from "./Scramble";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Scramble elements={testData}/>
   </React.StrictMode>,
   document.getElementById("root")
 );
