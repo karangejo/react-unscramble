@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import TextInput from "./../components/textInput";
-import Button from "./../components/button";
 import Card from "./../components/card";
 import FlexColumn from "../components/flexColumn";
 import FlexRow from "../components/flexRow";
 import Navbar from "../components/navbar";
+import IconButton from '../components/iconButton';
+import AddIcon from '../png/006-file.png';
+import ScrambleIcon from '../png/people.png';
+import UploadIcon from '../png/upload.png';
 
 function Create(props) {
   const [elements, setElements] = useState([]);
@@ -97,7 +100,7 @@ function Create(props) {
     <>
       <FlexColumn>
         <Navbar />
-        <Card>
+        <Card style={{width: "70vw"}}>
           <FlexColumn>
             <TextInput
               placeholder="Game Name"
@@ -116,13 +119,13 @@ function Create(props) {
                 style={{ flex: "2" }}
                 onChange={updateCurrentElem}
               />
-              <Button style={{ flex: "1" }} onClick={addElement}>
+              <IconButton icon={AddIcon} style={{ flex: "1" }} onClick={addElement}>
                 Add Item
-              </Button>
+              </IconButton>
             </FlexRow>
             <FlexRow>
-              <Button onClick={addScramble}>Add Scramble</Button>
-              <Button onClick={uploadScrambles}>Upload All Scrambles</Button>
+              <IconButton icon={ScrambleIcon} onClick={addScramble}>Add Scramble</IconButton>
+              <IconButton icon={UploadIcon} onClick={uploadScrambles}>Upload All Scrambles</IconButton>
             </FlexRow>
           </FlexColumn>
           {showCard && displayCurrentCard()}

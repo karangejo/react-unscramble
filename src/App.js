@@ -4,6 +4,7 @@ import Create from "./pages/create";
 import Browse from "./pages/browse";
 import Play from "./pages/play";
 import { UserContext } from "./userContext";
+import './App.css';
 
 function App() {
   // global state variables that get memoized and passed the to userContext provider

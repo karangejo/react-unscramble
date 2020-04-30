@@ -3,6 +3,7 @@ import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import Element from "./element";
 import Card from "./card";
+import Timer from "./timer";
 
 const ElementList = styled.div`
   padding: 15px;
@@ -14,14 +15,17 @@ const ElementList = styled.div`
 
 const Prompt = styled.div`
   font-size: 5vw;
+  text-align: center;
 `;
 
 export default function Row(props) {
   return (
-    <>
+    <Card style={{ height: "90vh", width: "80vw" }}>
+      <Timer setTime={props.setTime} />
       <Card>
         <Prompt>{props.prompt}</Prompt>
       </Card>
+
       <Card style={{ padding: "0px" }}>
         <Droppable droppableId={"droppableID"} direction="horizontal">
           {(provided, snapshot) => (
@@ -38,6 +42,6 @@ export default function Row(props) {
           )}
         </Droppable>
       </Card>
-    </>
+    </Card>
   );
 }

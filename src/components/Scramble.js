@@ -1,7 +1,6 @@
 import React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Row from "./row";
-import Card from "./card";
 
 function shuffle(arr) {
   let array = [...arr];
@@ -35,7 +34,6 @@ class Scramble extends React.Component {
     let newIndex = this.state.currentScrambleIndex + 1;
     if (newIndex >= this.props.game.scrambles.length) {
       this.setState({ finished: true });
-      console.log("FINISHED");
       this.props.finishedGame();
       return;
     }
@@ -65,7 +63,6 @@ class Scramble extends React.Component {
 
     this.setState({ elements: newElements });
     if (JSON.stringify(newElements) === JSON.stringify(this.state.correct)) {
-      console.log("CORRECT!");
       this.nextQuestion();
     }
   };
@@ -73,7 +70,13 @@ class Scramble extends React.Component {
   render() {
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
-        <Row elements={this.state.elements} prompt={this.state.game.scrambles[this.state.currentScrambleIndex].name}/>
+        <Row
+          elements={this.state.elements}
+          prompt={
+            this.state.game.scrambles[this.state.currentScrambleIndex].name
+          }
+          setTime={this.props.setTime}
+        />
       </DragDropContext>
     );
   }
