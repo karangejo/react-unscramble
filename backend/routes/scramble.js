@@ -28,9 +28,10 @@ router.get("/id", async (req, res) => {
 
 // Creating one
 router.post("/", async function (req, res) {
+  console.log(req.body);
   const scrambleToSave = new Scramble({
     name: req.body.name,
-    scrambles: req.body.questions,
+    scrambles: req.body.scrambles,
   });
   console.log(scrambleToSave);
   try {
