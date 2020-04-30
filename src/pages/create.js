@@ -1,24 +1,43 @@
 import React, { useState } from "react";
+import axios from "axios";
 import TextInput from "./../components/textInput";
 import Button from "./../components/button";
 import Card from "./../components/card";
 import FlexColumn from "../components/flexColumn";
 import FlexRow from "../components/flexRow";
+import Navbar from "../components/navbar";
 
 function Create(props) {
   const [elements, setElements] = useState([]);
   const [elementString, setElementString] = useState("");
   const [name, setName] = useState("");
+  const [scrambleName, setScrambleName] = useState("");
   const [currentElem, setCurrentElem] = useState("");
   const [showCard, setShowCard] = useState(false);
   const [showScrambles, setShowScrambles] = useState(false);
   const [scrambles, setScrambles] = useState([]);
 
+  const uploadScrambles = () => {
+    let data = {
+      name: name,
+      scrambles: scrambles,
+    };
+
+    axios
+      .post("http://localhost:3001/scramble/", data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const resetState = () => {
     setShowCard(false);
     setElements([]);
     setElementString("");
-    setName("");
+    setScrambleName("");
     setCurrentElem("");
   };
 
@@ -28,6 +47,10 @@ function Create(props) {
 
   const updateName = (event) => {
     setName(event.currentTarget.value);
+  };
+
+  const updateScrambleName = (event) => {
+    setScrambleName(event.currentTarget.value);
   };
 
   const addElement = () => {
@@ -42,14 +65,14 @@ function Create(props) {
   const displayCurrentCard = () => {
     return (
       <Card>
-        <h1>{name}</h1>
+        <h1>{scrambleName}</h1>
         <h2>{elementString}</h2>
       </Card>
     );
   };
 
   const addScramble = () => {
-    let newScramble = { name: name, scramble: elements };
+    let newScramble = { name: scrambleName, scramble: elements };
     let scramblesArray = [...scrambles];
     scramblesArray.push(newScramble);
     setScrambles(scramblesArray);
@@ -60,7 +83,7 @@ function Create(props) {
   const displayScrambles = () => {
     const items = scrambles.map((element, index) => {
       return (
-        <Card>
+        <Card key={index}>
           <h1>{element.name}</h1>
           <h2>{element.scramble.join(" ")}</h2>
         </Card>
@@ -73,12 +96,22 @@ function Create(props) {
   return (
     <>
       <FlexColumn>
+        <Navbar />
         <Card>
           <FlexColumn>
-            <TextInput placeholder="name" value={name} onChange={updateName} />
+            <TextInput
+              placeholder="Game Name"
+              value={name}
+              onChange={updateName}
+            />
+            <TextInput
+              placeholder="Scramble Name"
+              value={scrambleName}
+              onChange={updateScrambleName}
+            />
             <FlexRow>
               <TextInput
-                placeholder="element"
+                placeholder="Element"
                 value={currentElem}
                 style={{ flex: "2" }}
                 onChange={updateCurrentElem}
@@ -87,7 +120,10 @@ function Create(props) {
                 Add Item
               </Button>
             </FlexRow>
-            <Button onClick={addScramble}>Add Scramble</Button>
+            <FlexRow>
+              <Button onClick={addScramble}>Add Scramble</Button>
+              <Button onClick={uploadScrambles}>Upload All Scrambles</Button>
+            </FlexRow>
           </FlexColumn>
           {showCard && displayCurrentCard()}
         </Card>

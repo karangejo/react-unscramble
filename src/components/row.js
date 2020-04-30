@@ -2,37 +2,42 @@ import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import Element from "./element";
+import Card from "./card";
 
-const Container = styled.div`
-  margin: 8px;
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-  width: fit-content;
-`;
 const ElementList = styled.div`
-  padding: 8px;
-  background-color: ${(props) => (props.isDraggingOver ? "skyblue" : "orange")};
+  padding: 15px;
+  border-radius: 10px;
+  background-color: ${(props) => (props.isDraggingOver ? "skyblue" : "white")};
   display: flex;
   justify-content: center;
 `;
 
+const Prompt = styled.div`
+  font-size: 5vw;
+`;
+
 export default function Row(props) {
   return (
-    <Container>
-      <Droppable droppableId={"droppableID"} direction="horizontal">
-        {(provided, snapshot) => (
-          <ElementList
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            isDraggingOver={snapshot.isDraggingOver}
-          >
-            {props.elements.map((elem, index) => {
-              return <Element key={elem} element={elem} index={index} />;
-            })}
-            {provided.placeholder}
-          </ElementList>
-        )}
-      </Droppable>
-    </Container>
+    <>
+      <Card>
+        <Prompt>{props.prompt}</Prompt>
+      </Card>
+      <Card style={{ padding: "0px" }}>
+        <Droppable droppableId={"droppableID"} direction="horizontal">
+          {(provided, snapshot) => (
+            <ElementList
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              isDraggingOver={snapshot.isDraggingOver}
+            >
+              {props.elements.map((elem, index) => {
+                return <Element key={elem} element={elem} index={index} />;
+              })}
+              {provided.placeholder}
+            </ElementList>
+          )}
+        </Droppable>
+      </Card>
+    </>
   );
 }

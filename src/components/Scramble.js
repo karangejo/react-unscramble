@@ -1,6 +1,7 @@
 import React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Row from "./row";
+import Card from "./card";
 
 function shuffle(arr) {
   let array = [...arr];
@@ -8,7 +9,11 @@ function shuffle(arr) {
     let j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
-  return array;
+  if (JSON.stringify(array) === JSON.stringify(arr)) {
+    return shuffle(array);
+  } else {
+    return array;
+  }
 }
 
 class Scramble extends React.Component {
@@ -16,8 +21,31 @@ class Scramble extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { correct: props.elements, elements: shuffle(props.elements) };
+    this.state = {
+      game: props.game,
+      name: props.game.name,
+      currentScrambleIndex: 0,
+      correct: props.game.scrambles[0].scramble,
+      elements: shuffle(props.game.scrambles[0].scramble),
+      finished: false,
+    };
   }
+
+  nextQuestion = () => {
+    let newIndex = this.state.currentScrambleIndex + 1;
+    if (newIndex >= this.props.game.scrambles.length) {
+      this.setState({ finished: true });
+      console.log("FINISHED");
+      this.props.finishedGame();
+      return;
+    }
+    let newScramble = this.props.game.scrambles[newIndex].scramble;
+    this.setState({
+      correct: newScramble,
+      elements: shuffle(newScramble),
+      currentScrambleIndex: newIndex,
+    });
+  };
 
   onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -34,16 +62,18 @@ class Scramble extends React.Component {
     const newElements = Array.from(this.state.elements);
     newElements.splice(source.index, 1);
     newElements.splice(destination.index, 0, draggableId);
+
+    this.setState({ elements: newElements });
     if (JSON.stringify(newElements) === JSON.stringify(this.state.correct)) {
       console.log("CORRECT!");
+      this.nextQuestion();
     }
-    this.setState({ elements: newElements });
   };
 
   render() {
     return (
       <DragDropContext onDragEnd={this.onDragEnd}>
-        <Row elements={this.state.elements} />
+        <Row elements={this.state.elements} prompt={this.state.game.scrambles[this.state.currentScrambleIndex].name}/>
       </DragDropContext>
     );
   }

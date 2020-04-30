@@ -4,7 +4,6 @@ const Button = styled.button`
   display: block;
   margin: 8px;
   padding: 12px;
-  font-family: inherit;
   font-size: 14px;
   font-weight: 700;
   color: #fff;
