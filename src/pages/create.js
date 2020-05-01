@@ -14,6 +14,7 @@ import CurrentCard from "../components/currentCard";
 import CreatedScramble from "../components/createdScramble";
 import CreatedScrambleGame from "../components/createdScrambleGame";
 import Alert from "../components/alert";
+import UploadFile from "../components/fileUpload";
 
 function Create(props) {
   const fade = useSpring({
@@ -176,11 +177,14 @@ function Create(props) {
                 value={name}
                 onChange={updateName}
               />
-              <TextInput
-                placeholder="Scramble Name"
-                value={scrambleName}
-                onChange={updateScrambleName}
-              />
+              <FlexRow>
+                <TextInput
+                  placeholder="Scramble Prompt"
+                  value={scrambleName}
+                  onChange={updateScrambleName}
+                />
+                <UploadFile />
+              </FlexRow>
               <FlexRow>
                 <TextInput
                   placeholder="Element"
