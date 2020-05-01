@@ -1,8 +1,9 @@
 import React from "react";
 import Card from "./card";
+import FlexRow from "./flexRow";
 import { animated, useSpring, config } from "react-spring";
 
-function CurrentCard(props) {
+function CreatedScrambleGame(props) {
   const fade = useSpring({
     config: config.molasses,
     opacity: 1,
@@ -12,11 +13,11 @@ function CurrentCard(props) {
   return (
     <animated.div style={fade}>
       <Card>
-        <h1 align="center">{props.scrambleName}</h1>
-        <h2 align="center">{props.elementString}</h2>
+        <h1 align="center">{props.name}</h1>
+        <FlexRow style={{flexWrap: "wrap"}}>{props.items}</FlexRow>
       </Card>
     </animated.div>
   );
 }
 
-export default CurrentCard;
+export default CreatedScrambleGame;

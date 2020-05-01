@@ -12,6 +12,7 @@ import ScrambleIcon from "../png/people.png";
 import UploadIcon from "../png/upload.png";
 import CurrentCard from "../components/currentCard";
 import CreatedScramble from "../components/createdScramble";
+import CreatedScrambleGame from "../components/createdScrambleGame";
 import Alert from "../components/alert";
 
 function Create(props) {
@@ -152,7 +153,7 @@ function Create(props) {
       return <CreatedScramble key={index} element={element} index={index} />;
     });
 
-    return items;
+    return <CreatedScrambleGame name={name} items={items} />;
   };
 
   const invalidScrambleAlert = () => {
