@@ -13,7 +13,7 @@ const bounce = keyframes`
   }
 
   50% {
-    transform: translate(0, -30px);
+    transform: translate(0, -20px);
   }
 `;
 

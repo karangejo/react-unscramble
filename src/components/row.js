@@ -28,8 +28,8 @@ export default function Row(props) {
 
   return (
     <animated.div style={fade}>
-      <Card style={{ height: "90vh", width: "80vw" }}>
-        <Timer setTime={props.setTime} />
+      <Card style={{ height: "90vh", width: "80vw" , justifyContent: "space-evenly"}}>
+        
         <Card>
           <Prompt>{props.prompt}</Prompt>
         </Card>
@@ -50,6 +50,7 @@ export default function Row(props) {
             )}
           </Droppable>
         </Card>
+        <Timer setTime={props.setTime} />
       </Card>
     </animated.div>
   );
