@@ -1,4 +1,5 @@
 import React from "react";
+import { animated, useSpring, config } from "react-spring";
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import Element from "./element";
@@ -19,29 +20,37 @@ const Prompt = styled.div`
 `;
 
 export default function Row(props) {
-  return (
-    <Card style={{ height: "90vh", width: "80vw" }}>
-      <Timer setTime={props.setTime} />
-      <Card>
-        <Prompt>{props.prompt}</Prompt>
-      </Card>
+  const fade = useSpring({
+    config: config.molasses,
+    opacity: 1,
+    from: { opacity: 0 },
+  });
 
-      <Card style={{ padding: "0px" }}>
-        <Droppable droppableId={"droppableID"} direction="horizontal">
-          {(provided, snapshot) => (
-            <ElementList
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              isDraggingOver={snapshot.isDraggingOver}
-            >
-              {props.elements.map((elem, index) => {
-                return <Element key={elem} element={elem} index={index} />;
-              })}
-              {provided.placeholder}
-            </ElementList>
-          )}
-        </Droppable>
+  return (
+    <animated.div style={fade}>
+      <Card style={{ height: "90vh", width: "80vw" }}>
+        <Timer setTime={props.setTime} />
+        <Card>
+          <Prompt>{props.prompt}</Prompt>
+        </Card>
+
+        <Card style={{ padding: "0px" }}>
+          <Droppable droppableId={"droppableID"} direction="horizontal">
+            {(provided, snapshot) => (
+              <ElementList
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                isDraggingOver={snapshot.isDraggingOver}
+              >
+                {props.elements.map((elem, index) => {
+                  return <Element key={elem} element={elem} index={index} />;
+                })}
+                {provided.placeholder}
+              </ElementList>
+            )}
+          </Droppable>
+        </Card>
       </Card>
-    </Card>
+    </animated.div>
   );
 }

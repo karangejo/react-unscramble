@@ -16,6 +16,7 @@ router.get("/", async (req, res) => {
 router.get("/id", async (req, res) => {
   try {
     const scramble = await Scramble.find({ owner: req.query.id });
+    console.log(scramble);
     res.status(200).json(scramble);
     if (scramble == null) {
       return res.status(404).json({ message: "Cannot find scramble" });
@@ -28,7 +29,6 @@ router.get("/id", async (req, res) => {
 
 // Creating one
 router.post("/", async function (req, res) {
-  console.log(req.body);
   const scrambleToSave = new Scramble({
     name: req.body.name,
     scrambles: req.body.scrambles,

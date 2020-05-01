@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { animated, useSpring, config } from "react-spring";
 import Card from "./card";
 import useInterval from "./useInterval";
 import FlexColumn from "./flexColumn";
@@ -20,6 +21,11 @@ const Game = styled.h1`
 
 function ReadyGo(props) {
   const [time, setTime] = useState(3);
+  const fade = useSpring({
+    config: config.molasses,
+    opacity: 1,
+    from: { opacity: 0 },
+  });
 
   useInterval(() => {
     setTime(time - 1);
@@ -29,13 +35,15 @@ function ReadyGo(props) {
   }, 1000);
 
   return (
-    <Card style={{ height: "70vh", width: "80vw" }}>
-      <FlexColumn style={{ height: "100%" }}>
-        <Game>{props.gameName}</Game>
-        {time >= 1 ? <Count>{time}</Count> : <Count>Go!</Count>}
-        <Image src={ReadyIcon} alt="ready icon" />
-      </FlexColumn>
-    </Card>
+    <animated.div style={fade}>
+      <Card style={{ height: "70vh", width: "80vw" }}>
+        <FlexColumn style={{ height: "100%" }}>
+          <Game>{props.gameName}</Game>
+          {time >= 1 ? <Count>{time}</Count> : <Count>Go!</Count>}
+          <Image src={ReadyIcon} alt="ready icon" />
+        </FlexColumn>
+      </Card>
+    </animated.div>
   );
 }
 
