@@ -3,8 +3,10 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Create from "./pages/create";
 import Browse from "./pages/browse";
 import Play from "./pages/play";
+import Test from "./pages/test";
+
 import { UserContext } from "./userContext";
-import './App.css';
+import "./App.css";
 
 function App() {
   // global state variables that get memoized and passed the to userContext provider
@@ -27,6 +29,7 @@ function App() {
           <Route path="/" component={Browse} exact />
           <Route path="/create" component={Create} />
           <Route path="/play" component={Play} />
+          <Route path="/test" component={Test} />
         </UserContext.Provider>
       </Switch>
     </BrowserRouter>

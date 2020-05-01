@@ -4,11 +4,23 @@ import Card from "./card";
 import useInterval from "./useInterval";
 import FlexColumn from "./flexColumn";
 import styled from "styled-components";
+import { keyframes } from "styled-components";
 import ReadyIcon from "../png/files-and-folders.png";
+
+const bounce = keyframes`
+  0%, 100% {
+    transform: translate(0, 0px);
+  }
+
+  50% {
+    transform: translate(0, -30px);
+  }
+`;
 
 const Image = styled.img`
   width: 120px;
   height: 120px;
+  animation: ${bounce} 1s ease infinite; 
 `;
 
 const Count = styled.h1`
