@@ -75,6 +75,9 @@ class Scramble extends React.Component {
           prompt={
             this.state.game.scrambles[this.state.currentScrambleIndex].name
           }
+          image={
+            this.state.game.scrambles[this.state.currentScrambleIndex].image
+          }
           setTime={this.props.setTime}
         />
       </DragDropContext>

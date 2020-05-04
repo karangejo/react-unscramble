@@ -28,12 +28,14 @@ function Create(props) {
   const [name, setName] = useState("");
   const [scrambleName, setScrambleName] = useState("");
   const [currentElem, setCurrentElem] = useState("");
+  const [currentImage, setCurrentImage] = useState([]);
   const [showCard, setShowCard] = useState(false);
   const [showScrambles, setShowScrambles] = useState(false);
   const [scrambles, setScrambles] = useState([]);
   const [invalidScramble, setInvalidScramble] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [uploadResponse, setUploadResponse] = useState("");
+  const [imageArray, setImageArray] = useState([]);
 
   const resetEverything = () => {
     setShowCard(false);
@@ -67,6 +69,7 @@ function Create(props) {
           setUploadResponse("Success! Your Scramble game has been uploaded.");
           resetEverything();
           setUploadSuccess(true);
+          uploadImages();
         })
         .catch((err) => {
           setUploadSuccess(true);
@@ -80,12 +83,37 @@ function Create(props) {
     }
   };
 
+  const uploadImages = () => {
+    console.log("selected many");
+    let files = imageArray;
+    const formData = new FormData();
+    //append all files to formData
+    for (var file of files) {
+      formData.append("uploadedFiles", file);
+    }
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post("http://localhost:3030/upload-files", formData, config)
+      .then((res) => {
+        console.log(res);
+        console.log("files Saved");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const resetState = () => {
     setShowCard(false);
     setElements([]);
     setElementString("");
     setScrambleName("");
     setCurrentElem("");
+    setCurrentImage([]);
   };
 
   const updateCurrentElem = (event) => {
@@ -123,25 +151,40 @@ function Create(props) {
 
   const displayCurrentCard = () => {
     return (
-      <CurrentCard scrambleName={scrambleName} elementString={elementString} />
+      <CurrentCard
+        scrambleName={scrambleName}
+        elementString={elementString}
+        currentImage={currentImage}
+      />
     );
   };
 
   const validateScramble = () => {
-    if (scrambleName && !(elements.length === 0)) {
+    if (scrambleName && !(elements.length === 0) && !(elements.length === 1)) {
       return true;
     } else {
       return false;
     }
   };
 
+  const addFileToUploadArray = () => {
+    const newArray = [...imageArray];
+    newArray.push(currentImage);
+    setImageArray(newArray);
+  };
+
   const addScramble = () => {
     if (validateScramble()) {
-      let newScramble = { name: scrambleName, scramble: elements };
+      let newScramble = {
+        name: scrambleName,
+        scramble: elements,
+        image: currentImage.name,
+      };
       let scramblesArray = [...scrambles];
       scramblesArray.push(newScramble);
       setScrambles(scramblesArray);
       setShowScrambles(true);
+      addFileToUploadArray();
       resetState();
       setInvalidScramble(false);
     } else {
@@ -183,7 +226,7 @@ function Create(props) {
                   value={scrambleName}
                   onChange={updateScrambleName}
                 />
-                <UploadFile />
+                <UploadFile setCurrentFile={setCurrentImage} />
               </FlexRow>
               <FlexRow>
                 <TextInput

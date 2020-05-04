@@ -9,6 +9,7 @@ import FinishedGame from "../components/finishedGame";
 function Play() {
   const context = useContext(UserContext);
   const history = useHistory();
+  console.log(context.currentGame);
 
   const [showGame, setShowGame] = useState(false);
   const [finished, setFinished] = useState(false);
@@ -47,7 +48,10 @@ function Play() {
             setTime={setTime}
           />
         ) : (
-          <ReadyGo finished={finishedIntro} gameName={context.currentGame.name}/>
+          <ReadyGo
+            finished={finishedIntro}
+            gameName={context.currentGame.name}
+          />
         )
       ) : (
         <FinishedGame finalTime={time} />

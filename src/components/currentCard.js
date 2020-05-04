@@ -14,6 +14,9 @@ function CurrentCard(props) {
       <Card>
         <h1 align="center">{props.scrambleName}</h1>
         <h2 align="center">{props.elementString}</h2>
+        {props.currentImage ? (
+          <h3 align="center">{props.currentImage.name}</h3>
+        ) : null}
       </Card>
     </animated.div>
   );

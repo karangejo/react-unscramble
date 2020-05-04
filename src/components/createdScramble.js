@@ -14,6 +14,7 @@ function CreatedScramble(props) {
       <Card key={props.index}>
         <h1 align="center">{props.element.name}</h1>
         <h2 align="center">{props.element.scramble.join(" ")}</h2>
+        <h3>{props.element.image}</h3>
       </Card>
     </animated.div>
   );

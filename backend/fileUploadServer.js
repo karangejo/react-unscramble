@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const _ = require("lodash");
 const mongoose = require("mongoose");
-var spawn = require("child_process").spawn;
+//var spawn = require("child_process").spawn;
 
 const FileMongo = require("./models/file");
 
@@ -49,7 +49,7 @@ const savePathToMongo = async (path, res) => {
   try {
     const newMongoFile = await mongoFile.save();
     console.log(newMongoFile);
-    return(newMongoFile);
+    return newMongoFile;
   } catch (err) {
     console.log(err);
   }
@@ -64,50 +64,60 @@ app.post("/upload-files", async (req, res) => {
       });
     } else {
       let data = [];
+      // if many files
+      if (req.files.uploadedFiles.length) {
+        console.log("Many");
+        //loop all files
+        _.forEach(_.keysIn(req.files.uploadedFiles), (key) => {
+          let file = req.files.uploadedFiles[key];
+          console.log(file);
+          //move file to uploads directory
+          const filePath = "./images/" + file.name;
+          console.log(filePath);
+          file.mv(filePath);
 
-      //loop all files
-      _.forEach(_.keysIn(req.files.uploadedFiles), (key) => {
-        let file = req.files.uploadedFiles[key];
+          //save to mongoDb
+          const mongoFile = savePathToMongo(filePath, res);
 
-        //move file to uploads directory
-        const filePath = "./images/" + file.name;
-        file.mv(filePath);
+          //push file details
+          data.push({
+            name: file.name,
+            mimetype: file.mimetype,
+            size: file.size,
+            mongoInfo: mongoFile,
+          });
+        });
 
-        // resize and crop image
-        const fileInfo = filePath.split("/").pop().split(".");
-        const newFileName =
-          "./convertedImages/" + fileInfo[0] + "600x600" + fileInfo[1];
-        const args = [
-          filePath,
-          "-resize",
-          '"600x600"',
-          "-gravity",
-          "center",
-          "-extent",
-          "600x600",
-          newFileName,
-        ];
-        const convert = spawn("convert", args);
-        console.log(convert);
+        //return response
+        res.send({
+          status: true,
+          message: "Files are uploaded",
+          data: data,
+        });
+        //else if just one file
+      } else {
+        console.log("just one");
+        //Use the name of the input field (i.e. "newPhoto") to retrieve the uploaded file
+        let newFile = req.files.uploadedFiles;
 
-        //save to mongoDb
+        //Use the mv() method to place the file in upload directory (i.e. "uploads")
+        const filePath = "./images/" + newFile.name;
+        newFile.mv(filePath);
+
         const mongoFile = savePathToMongo(filePath, res);
 
-        //push file details
-        data.push({
-          name: file.name,
-          mimetype: file.mimetype,
-          size: file.size,
-          mongoInfo: mongoFile,
+        //send response
+        res.send({
+          status: true,
+          message: "File is uploaded",
+          data: {
+            name: newFile.name,
+            mimetype: newFile.mimetype,
+            size: newFile.size,
+            mongoInfo: mongoFile,
+          },
         });
-      });
-
-      //return response
-      res.send({
-        status: true,
-        message: "Files are uploaded",
-        data: data,
-      });
+      }
     }
   } catch (err) {
     res.status(500).send(err);

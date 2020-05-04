@@ -1,7 +1,15 @@
-## UNSCRAMBLE
+# UNSCRAMBLE
 
-A webapp that allows users to create scramble games and play them. 
+A webapp that allows users to create scramble games and play them.
 This app was designed for use in a classroom setting.
+
+### Homepage
+
+![preview1](./images/scrambler.png)
+
+### Gameplay
+
+![preview2](./images/scramblerPlay.png)
 
 ## Installation
 
@@ -9,7 +17,14 @@ clone this repo and run:
 
 ```bash
 npm install
-npm run startall
+npm run start
+```
+
+then run the following in two different terminals:
+
+```bash
+npm run servers
+npm run fileserver
 ```
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
