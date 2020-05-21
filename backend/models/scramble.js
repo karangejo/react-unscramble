@@ -9,6 +9,10 @@ const scrambleSchema = new mongoose.Schema({
     type: [],
     required: true,
   },
+  owner: {
+    type: String,
+    required: true,
+  },
 });
 
 const scramblesDB = mongoose.connection.useDb("scrambles");

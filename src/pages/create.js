@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { animated, useSpring, config } from "react-spring";
 import axios from "axios";
 import TextInput from "./../components/textInput";
@@ -15,6 +15,7 @@ import CreatedScramble from "../components/createdScramble";
 import CreatedScrambleGame from "../components/createdScrambleGame";
 import Alert from "../components/alert";
 import UploadFile from "../components/fileUpload";
+import { UserContext } from "../userContext";
 
 function Create(props) {
   const fade = useSpring({
@@ -36,6 +37,8 @@ function Create(props) {
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [uploadResponse, setUploadResponse] = useState("");
   const [imageArray, setImageArray] = useState([]);
+
+  const context = useContext(UserContext);
 
   const resetEverything = () => {
     setShowCard(false);
@@ -61,10 +64,11 @@ function Create(props) {
       let data = {
         name: name,
         scrambles: scrambles,
+        owner: context.user.userID,
       };
 
       axios
-        .post("http://localhost:3001/scramble/", data)
+        .post(process.env.REACT_APP_SUBMIT_ONE_GAME, data)
         .then((res) => {
           setUploadResponse("Success! Your Scramble game has been uploaded.");
           resetEverything();
@@ -97,7 +101,7 @@ function Create(props) {
       },
     };
     axios
-      .post("http://localhost:3030/upload-files", formData, config)
+      .post(process.env.REACT_APP_UPLOAD_IMAGES, formData, config)
       .then((res) => {
         console.log(res);
         console.log("files Saved");
@@ -208,10 +212,9 @@ function Create(props) {
     return <Alert>{uploadResponse}</Alert>;
   };
 
-  return (
-    <>
-      <FlexColumn>
-        <Navbar />
+  const loggedInView = () => {
+    return (
+      <>
         <animated.div style={fade}>
           <Card style={{ width: "70vw" }}>
             <FlexColumn>
@@ -258,8 +261,27 @@ function Create(props) {
         </animated.div>
         {uploadSuccess && displayUploadAlert()}
         <FlexRow>{showScrambles && displayScrambles()}</FlexRow>
-      </FlexColumn>
-    </>
+      </>
+    );
+  };
+
+  const loggedOutView = () => {
+    return <Alert>You must log in to create a scramble!</Alert>;
+  };
+
+  const checkLogin = () => {
+    if (context.loggedIn) {
+      return loggedInView();
+    } else {
+      return loggedOutView();
+    }
+  };
+
+  return (
+    <FlexColumn>
+      <Navbar />
+      {checkLogin()}
+    </FlexColumn>
   );
 }
 

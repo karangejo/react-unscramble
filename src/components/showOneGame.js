@@ -39,7 +39,7 @@ function ShowOneGame(props) {
 
   const playGame = (game) => {
     context.setCurrentGame(game);
-    history.push("/play");
+    history.push("/play?id=" + game._id);
   };
 
   const displayUserScrambles = (scramblesArray) => {
@@ -59,7 +59,7 @@ function ShowOneGame(props) {
   const deleteGame = (index) => {
     let data = { id: scrambles[index]._id };
     axios
-      .post("http://localhost:3001/scramble/deletebyid", data)
+      .post(process.env.REACT_APP_DELETE_GAME_BY_ID, data)
       .then((res) => {
         console.log(res);
         getData();
@@ -81,9 +81,11 @@ function ShowOneGame(props) {
         <IconButton icon={PlayIcon} onClick={() => playGame(props.elem)}>
           Play
         </IconButton>
-        <IconButton icon={DeleteIcon} onClick={() => deleteGame(props.index)}>
-          Delete Game
-        </IconButton>
+        {props.showDelete ? (
+          <IconButton icon={DeleteIcon} onClick={() => deleteGame(props.index)}>
+            Delete Game
+          </IconButton>
+        ) : null}
       </Card>
     </animated.div>
   );

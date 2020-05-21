@@ -12,10 +12,20 @@ router.get("/", async (req, res) => {
   }
 });
 
-// getting one by Id
-router.get("/id", async (req, res) => {
+//Getting all by owner
+router.post("/owner", async (req, res) => {
   try {
-    const scramble = await Scramble.find({ owner: req.query.id });
+    const scrambles = await Scramble.find({ owner: req.body.ownerId });
+    res.json(scrambles);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// getting one by Id
+router.post("/id", async (req, res) => {
+  try {
+    const scramble = await Scramble.find({ _id: req.body.id });
     console.log(scramble);
     res.status(200).json(scramble);
     if (scramble == null) {
@@ -32,6 +42,7 @@ router.post("/", async function (req, res) {
   const scrambleToSave = new Scramble({
     name: req.body.name,
     scrambles: req.body.scrambles,
+    owner: req.body.owner,
   });
   console.log(scrambleToSave);
   try {

@@ -25,4 +25,7 @@ app.use(cors()); // allows anyone to access the API
 const ScrambleRouter = require("./routes/scramble");
 app.use("/scramble", ScrambleRouter);
 
-app.listen(3001, () => console.log("Server Started listening on port 3001"));
+const usersRouter = require("./routes/users");
+app.use("/users", usersRouter);
+
+app.listen(3666, () => console.log("Server Started listening on port 3666"));
